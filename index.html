@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deal Finder Sweeps</title>
+<style>
+:root{color-scheme:light dark;--bg:light-dark(#f6f3ee,#14110f);--card:light-dark(#fff,#1f1b18);--ink:light-dark(#1c1916,#efe9e1);--mute:light-dark(#7a726a,#a59c92);--line:light-dark(#e7e1d8,#332d28);--acc:light-dark(#1f6f5c,#4fb79c);--hot:light-dark(#c2410c,#fb8a52);--warn:light-dark(#b45309,#f0a54a);--bad:light-dark(#b91c1c,#f07171);--ok:light-dark(#15803d,#5cc98a);--rev:light-dark(#a16207,#e5b54a)}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;background:var(--bg);color:var(--ink);overflow-x:clip}
+a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}
+header{position:sticky;top:0;z-index:5;background:#14110f;color:#f6f3ee;padding:10px 14px 0;border-bottom:1px solid #2a2420}
+.brand{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}.brand b{font-size:17px}
+.scan{font-size:12px;color:#bfb6ab}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;background:#22c55e}
+nav{display:flex;gap:2px;overflow-x:auto;margin-top:8px;scrollbar-width:none}nav::-webkit-scrollbar{display:none}
+nav button{flex:none;font:inherit;background:none;border:0;color:#d6cec4;padding:10px 12px;border-radius:8px 8px 0 0;white-space:nowrap;font-size:14px;cursor:pointer;min-height:44px}
+nav button.on{background:var(--bg);color:var(--ink);font-weight:600}
+main{max-width:1100px;margin:0 auto;padding:14px}
+h1{font-size:20px;margin:6px 0 4px}h2{font-size:16px;margin:22px 0 8px}
+.lead{color:var(--mute);font-size:13px;margin:0 0 12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr))}
+.t{font-weight:600;line-height:1.3}.deal{display:flex;gap:12px}.deal .ph{flex:none;width:96px;height:96px;border-radius:10px;overflow:hidden;background:var(--line);display:block}.deal .ph img{width:100%;height:100%;object-fit:cover;display:block}
+.muted{color:var(--mute);font-size:13px}
+.nums{display:flex;flex-wrap:wrap;gap:6px 14px;margin:6px 0;font-size:13px}.nums b{font-size:15px;white-space:nowrap}
+.pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 7px;border-radius:99px;border:1px solid currentColor;text-transform:uppercase;letter-spacing:.3px}
+.Hot,.ALERT{color:var(--hot)}.Promising{color:var(--ok)}.Selective{color:var(--warn)}.Avoid,.REJECT{color:var(--bad)}.Unverified{color:var(--mute)}.REVIEW,.OFFER{color:var(--rev)}
+.profit{color:var(--hot)}
+.flag{font-size:12px;padding:2px 0;color:var(--warn)}
+.actions{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}
+.btn{font:inherit;font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;min-height:40px;display:inline-flex;align-items:center}
+.btn.primary{background:var(--acc);border-color:var(--acc);color:#fff}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{font-size:12px;color:var(--mute);font-weight:600}
+td.r,th.r{text-align:right;white-space:nowrap}
+.kpis{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));margin-bottom:12px}
+.kpi .big{font-size:clamp(22px,5vw,28px);font-weight:700;line-height:1.1}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><b>Deal Finder</b><span class="scan"><span class="dot"></span><span id="last">Last sweep —</span></span></div>
+  <nav id="tabs">
+    <button data-v="deals" class="on">Deals</button>
+    <button data-v="offer">Make an offer</button>
+    <button data-v="saved">Saved</button>
+    <button data-v="rejected">Rejected</button>
+    <button data-v="styles">Styles</button>
+    <button data-v="sweeps">Sweeps</button>
+  </nav>
+</header>
+<main id="app"></main>
+<!--DATA-START--><script id="sweep-data" type="application/json">{
+ "updated":"2026-11-22T13:00:00-05:00",
+ "rules":{"max_total":50,"min_profit":40,"tax":0.08,"resale_fee":0.136,"resale_flat":0.4,"resale_ship":9.0,"supplies":1.5},
+ "deals":[],
+ "rejected":[],
+ "styles":[
+  {"slug":"tory-burch-lee-radziwill","brand":"Tory Burch","name":"Lee Radziwill bag","median":345,"p25":295,"conservative":295,"sold90":85,"active":120,"sell_through":0.41,"max_all_in":50,"cls":"Promising","note":""},
+  {"slug":"filson-mackinaw-cruiser","brand":"Filson","name":"Mackinaw Cruiser","median":290,"p25":247.49,"conservative":247.49,"sold90":110,"active":145,"sell_through":0.43,"max_all_in":50,"cls":"Promising","note":""},
+  {"slug":"burberry-quilted-jacket","brand":"Burberry","name":"Quilted trench / jacket","median":235,"p25":200,"conservative":200,"sold90":190,"active":310,"sell_through":0.38,"max_all_in":50,"cls":"Promising","note":""},
+  {"slug":"sezane-clyde-trench","brand":"Sézane","name":"Clyde trench","median":230,"p25":195,"conservative":195,"sold90":65,"active":50,"sell_through":0.56,"max_all_in":50,"cls":"Hot","note":""},
+  {"slug":"coach-tabby-bag","brand":"Coach","name":"Tabby bag","median":225,"p25":192,"conservative":192,"sold90":420,"active":610,"sell_through":0.41,"max_all_in":50,"cls":"Promising","note":""},
+  {"slug":"burberry-vintage-wool-trench","brand":"Burberry","name":"Vintage wool trench","median":210,"p25":175,"conservative":175,"sold90":95,"active":180,"sell_through":0.35,"max_all_in":50,"cls":"Promising","note":""},
+  {"slug":"burberry-trench-coat","brand":"Burberry","name":"Trench coat","median":200,"p25":170,"conservative":170,"sold90":340,"active":1200,"sell_through":0.22,"max_all_in":50,"cls":"Promising","note":"Retail listings inflate active"},
+  {"slug":"arcteryx-beta-jacket","brand":"Arc'teryx","name":"Beta jacket","median":195,"p25":160,"conservative":160,"sold90":280,"active":340,"sell_through":0.45,"max_all_in":50,"cls":"Promising","note":""},
+  {"slug":"carhartt-detroit-jacket","brand":"Carhartt","name":"Detroit jacket (vintage)","median":230,"p25":160,"conservative":160,"sold90":2634,"active":4659,"sell_through":0.36,"max_all_in":50,"cls":"Promising","note":""},
+  {"slug":"barbour-waxed-jacket","brand":"Barbour","name":"Waxed jacket (Bedale/Beaufort)","median":185,"p25":155,"conservative":155,"sold90":310,"active":420,"sell_through":0.42,"max_all_in":50,"cls":"Promising","note":""},
+  {"slug":"mackage-wool-coat","brand":"Mackage","name":"Wool or down coat","median":185,"p25":155,"conservative":155,"sold90":140,"active":220,"sell_through":0.39,"max_all_in":50,"cls":"Promising","note":""},
+  {"slug":"polo-bear-sweater","brand":"Polo Ralph Lauren","name":"Polo Bear knit sweater","median":175,"p25":150,"conservative":150,"sold90":260,"active":380,"sell_through":0.41,"max_all_in":50,"cls":"Promising","note":"Knit only, no fleece"},
+  {"slug":"aritzia-super-puff","brand":"Aritzia","name":"Super Puff jacket","median":170,"p25":145,"conservative":145,"sold90":390,"active":410,"sell_through":0.49,"max_all_in":50,"cls":"Promising","note":""},
+  {"slug":"arcteryx-atom-jacket","brand":"Arc'teryx","name":"Atom jacket / hoody","median":165,"p25":140,"conservative":140,"sold90":410,"active":450,"sell_through":0.48,"max_all_in":50,"cls":"Promising","note":""},
+  {"slug":"north-face-nuptse","brand":"The North Face","name":"1996 Retro Nuptse jacket","median":165,"p25":138,"conservative":138,"sold90":520,"active":680,"sell_through":0.43,"max_all_in":50,"cls":"Promising","note":"Jackets only"},
+  {"slug":"doen-dress","brand":"Dôen","name":"Mainline dress","median":165,"p25":135,"conservative":135,"sold90":210,"active":240,"sell_through":0.47,"max_all_in":50,"cls":"Promising","note":"No Gap x Doen"}
+ ],
+ "sweeps":[],
+ "seen":[],
+ "rotation":0
+}</script><!--DATA-END-->
+<script>
+const D=JSON.parse(document.getElementById('sweep-data').textContent);
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const money=v=>typeof v==='number'?'$'+v.toFixed(2):'—';
+const pct=v=>typeof v==='number'?Math.round(v*100)+'%':'—';
+const ago=iso=>{const m=Math.round((Date.now()-new Date(iso))/60000);if(isNaN(m))return'';if(m<1)return'just now';if(m<60)return m+' min ago';if(m<2880)return Math.round(m/60)+' h ago';return Math.round(m/1440)+' d ago'};
+const styleBy=Object.fromEntries(D.styles.map(s=>[s.slug,s]));
+let marks={};try{marks=JSON.parse(localStorage.getItem('df-marks')||'{}')}catch(e){}
+const saveMarks=()=>{try{localStorage.setItem('df-marks',JSON.stringify(marks))}catch(e){}};
+let view='deals';
+$('#last').textContent='Last sweep '+ago(D.updated);
+
+const card=d=>{const st=styleBy[d.style]||{};const m=marks[d.id];
+return `<div class="card deal">${d.img?`<a class="ph" href="${esc(d.url)}" target="_blank" rel="noopener"><img src="${d.img}" alt="Listing photo" loading="lazy"></a>`:''}<div style="flex:1">
+ <div><span class="pill ${d.decision}">${d.decision}</span> <span class="muted">${esc(d.marketplace)} · found ${ago(d.found)}</span>${m?` <span class="muted">· ${m}</span>`:''}</div>
+ <div class="t"><a href="${esc(d.url)}" target="_blank" rel="noopener">${esc(d.title)}</a></div>
+ ${st.brand?`<div class="muted">${esc(st.brand)} — ${esc(st.name)}</div>`:''}
+ <div class="nums">
+  <span>All-in <b>${money(d.total)}</b></span>
+  <span>Est. resale <b>${money(d.resale)}</b></span>
+  <span class="profit">Net profit <b>+${money(d.net_profit)}</b></span>
+  ${d.offer_at?`<span>Offer <b>${money(d.offer_at)}</b></span>`:''}
+ </div>
+ ${(d.reasons||[]).map(r=>`<div class="muted">✓ ${esc(r)}</div>`).join('')}
+ ${(d.flags||[]).map(f=>`<div class="flag">⚠ ${esc(f)}</div>`).join('')}
+ <div class="actions">
