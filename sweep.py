@@ -219,7 +219,6 @@ def main():
                 "price": item["price"], "shipping": item["shipping"], "fees": item["fees"],
                 "total": total, "style": st["slug"], "resale": resale, "net_profit": profit,
                 "offer_at": offer_at if total > 50 else None,
-Use code with caution.
 "profit_at_offer": profit_at_offer if total > 50 else None,
 "flags": [], "reasons": [reason], "found": now_iso
 }
