@@ -233,7 +233,6 @@ elif total <= 50 and profit >= 30:
                 new_offers.append(record)
 else:
                 new_rejected.append({"marketplace": item["marketplace"], "title": f"{item['title']} - ${item['price']:.0f}", "why": f"Profit too low (${profit:.2f} net at ${total:.2f} all-in).", "url": item["url"]})
-
     data["deals"] = (new_alerts + new_offers + data.get("deals", []))[:40]
     seen_rej = {r["url"] for r in new_rejected}
     data["rejected"] = (new_rejected + [r for r in data.get("rejected", []) if r["url"] not in seen_rej])[:40]
@@ -253,4 +252,3 @@ else:
 
 if __name__ == "__main__":
     main()
-main()
