@@ -49,9 +49,9 @@ td.r,th.r{text-align:right;white-space:nowrap}
     <button data-v="sweeps">Sweeps</button>
   </nav>
 </header>
-<main id="app"></main>
+<main id="app"><div class="card">Loading dashboard...</div></main>
 <!--DATA-START--><script id="sweep-data" type="application/json">{
- "updated":"2026-11-22T15:05:00-05:00",
+ "updated":"2026-11-22T15:25:00-05:00",
  "rules":{"max_total":50,"min_profit":40,"tax":0.08,"resale_fee":0.136,"resale_flat":0.4,"resale_ship":9.0,"supplies":1.5},
  "deals":[],
  "rejected":[],
@@ -78,65 +78,92 @@ td.r,th.r{text-align:right;white-space:nowrap}
  "rotation":0
 }</script><!--DATA-END-->
 <script>
-const D=JSON.parse(document.getElementById('sweep-data').textContent);
-const $=s=>document.querySelector(s);
-const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const money=v=>typeof v==='number'?'$'+v.toFixed(2):'—';
-const pct=v=>typeof v==='number'?Math.round(v*100)+'%':'—';
-const ago=iso=>{const m=Math.round((Date.now()-new Date(iso))/60000);if(isNaN(m))return'';if(m<1)return'just now';if(m<60)return m+' min ago';if(m<2880)return Math.round(m/60)+' h ago';return Math.round(m/1440)+' d ago'};
-const styleBy=Object.fromEntries(D.styles.map(s=>[s.slug,s]));
-let marks={};try{marks=JSON.parse(localStorage.getItem('df-marks')||'{}')}catch(e){}
-const saveMarks=()=>{try{localStorage.setItem('df-marks',JSON.stringify(marks))}catch(e){}};
-let view='deals';
-$('#last').textContent='Last sweep '+ago(D.updated);
+try {
+const rawText = document.getElementById('sweep-data').textContent;
+const D = JSON.parse(rawText);
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const money = v => typeof v === 'number' ? '$' + v.toFixed(2) : '—';
+const pct = v => typeof v === 'number' ? Math.round(v * 100) + '%' : '—';
+const ago = iso => { const m = Math.round((Date.now() - new Date(iso)) / 60000); if (isNaN(m)) return ''; if (m < 1) return 'just now'; if (m < 60) return m + ' min ago'; if (m < 2880) return Math.round(m / 60) + ' h ago'; return Math.round(m / 1440) + ' d ago'; };
+const stylesList = D.styles || new Array();
+const styleBy = {};
+stylesList.forEach(s => { styleBy[s.slug] = s; });
+let marks = {};
+try { marks = JSON.parse(localStorage.getItem('df-marks') || '{}'); } catch (e) {}
+const saveMarks = () => { try { localStorage.setItem('df-marks', JSON.stringify(marks)); } catch (e) {} };
+let view = 'deals';
+$('#last').textContent = 'Last sweep ' + ago(D.updated);
 
-const card=d=>{const st=styleBy[d.style]||{};const m=marks[d.id];
-return `<div class="card deal">${d.img?`<a class="ph" href="${esc(d.url)}" target="_blank" rel="noopener"><img src="${d.img}" alt="Listing photo" loading="lazy"></a>`:''}<div style="flex:1">
- <div><span class="pill ${d.decision}">${d.decision}</span> <span class="muted">${esc(d.marketplace)} · found ${ago(d.found)}</span>${m?` <span class="muted">· ${m}</span>`:''}</div>
- <div class="t"><a href="${esc(d.url)}" target="_blank" rel="noopener">${esc(d.title)}</a></div>
- ${st.brand?`<div class="muted">${esc(st.brand)} — ${esc(st.name)}</div>`:''}
- <div class="nums">
-  <span>All-in <b>${money(d.total)}</b></span>
-  <span>Est. resale <b>${money(d.resale)}</b></span>
-  <span class="profit">Net profit <b>+${money(d.net_profit)}</b></span>
-  ${d.offer_at?`<span>Offer <b>${money(d.offer_at)}</b></span>`:''}
- </div>
- ${(d.reasons||new Array()).map(r=>`<div class="muted">✓ ${esc(r)}</div>`).join('')}
- ${(d.flags||new Array()).map(f=>`<div class="flag">⚠ ${esc(f)}</div>`).join('')}
- <div class="actions">
-Open listing ↗
-Save
-Bought
-Pass
-
-`};
-window.mark=(id,val)=>{marks[id]=val;saveMarks();render()};
-function render(){
-const app=$('#app');
-const active=D.deals.filter(d=>marks[d.id]!=='passed'&&marks[d.id]!=='bought');
-const alerts=active.filter(d=>d.decision==='ALERT');
-const offers=active.filter(d=>d.decision==='OFFER'||d.decision==='REVIEW');
-const lastSweep=D.sweeps.at(0)||{};
-if(view==='deals'){
-app.innerHTML=<h1>Top deals right now</h1><p class="lead">Every rule passed: ≤ $50 all-in, ≥ $40 conservative profit, verified style, and every photo checked.</p> <div class="kpis"> <div class="card kpi"><div class="muted">Buy alerts</div><div class="big profit">${alerts.length}</div></div> <div class="card kpi"><div class="muted">Offer / Review</div><div class="big">${offers.length}</div></div> <div class="card kpi"><div class="muted">Pages read last sweep</div><div class="big">${lastSweep.pages||0}</div></div> <div class="card kpi"><div class="muted">Profitable styles</div><div class="big">${D.styles.length}</div></div> </div> ${lastSweep.notes?${esc(lastSweep.notes)}:''} ${alerts.length?${alerts.map(card).join('')}:''} <h2>Listings I checked that didn't pass</h2> <div class="grid">${D.rejected.slice(0,12).map(r=>NOT RECOMMENDED ${esc(r.marketplace)}${esc(r.title)}✘ ${esc(r.why)}Open listing ↗).join('')}</div>;
-} else if(view==='offer'){
-app.innerHTML=<h1>Make an offer & Review</h1><div class="grid">${offers.length?offers.map(card).join(''):'<p class="muted">No offer opportunities right now.</p>'}</div>;
-} else if(view==='saved'){
-const saved=D.deals.filter(d=>marks[d.id]==='saved'||marks[d.id]==='bought');
-app.innerHTML=<h1>Saved & Bought</h1><div class="grid">${saved.length?saved.map(card).join(''):'<p class="muted">Nothing saved yet.</p>'}</div>;
-} else if(view==='rejected'){
-app.innerHTML=<h1>Rejected listings (${D.rejected.length})</h1><div class="grid">${D.rejected.map(r=>REJECTED ${esc(r.marketplace)}${esc(r.title)}✘ ${esc(r.why)}Open ↗).join('')}</div>;
-} else if(view==='styles'){
-app.innerHTML=<h1>Tracked styles (${D.styles.length})</h1><div class="tablewrap"><table><thead><tr><th>Brand & Style</th><th>Class</th><th class="r">Conservative</th><th class="r">90d Sold</th><th class="r">Sell-through</th><th class="r">Max All-In</th></tr></thead><tbody>${D.styles.map(s=>${esc(s.brand)} — ${esc(s.name)}${s.cls}${money(s.conservative)}${s.sold90}${pct(s.sell_through)}${money(s.max_all_in)}).join('')}</tbody></table></div>;
-} else if(view==='sweeps'){
-app.innerHTML=<h1>Sweep history</h1><div class="tablewrap"><table><thead><tr><th>Time</th><th>Sites</th><th>Searched</th><th class="r">Checked</th><th class="r">Alerts</th><th>Notes</th></tr></thead><tbody>${D.sweeps.map(w=>${ago(w.at)}${(w.sites||new Array()).join(', ')}${(w.searched||new Array()).join(', ')}${w.candidates}${w.alerts}${esc(w.notes)}).join('')}</tbody></table></div>;
+const card = d => {
+  const st = styleBy[d.style] || {};
+  const m = marks[d.id];
+  const reasonsHtml = (d.reasons || new Array()).map(r => '<div class="muted">✓ ' + esc(r) + '</div>').join('');
+  const flagsHtml = (d.flags || new Array()).map(f => '<div class="flag">⚠ ' + esc(f) + '</div>').join('');
+  return '<div class="card deal">' +
+    (d.img ? '<a class="ph" href="' + esc(d.url) + '" target="_blank" rel="noopener"><img src="' + d.img + '" alt="Listing photo" loading="lazy"></a>' : '') +
+    '<div style="flex:1">' +
+      '<div><span class="pill ' + d.decision + '">' + d.decision + '</span> <span class="muted">' + esc(d.marketplace) + ' · found ' + ago(d.found) + '</span>' + (m ? ' <span class="muted">· ' + m + '</span>' : '') + '</div>' +
+    '' + esc(d.title) + '' +
+(st.brand ? '' + esc(st.brand) + ' — ' + esc(st.name) + '' : '') +
+'' +
+'All-in ' + money(d.total) + '' +
+'Est. resale ' + money(d.resale) + '' +
+'Net profit +' + money(d.net_profit) + '' +
+(d.offer_at ? 'Offer ' + money(d.offer_at) + '' : '') +
+'' +
+reasonsHtml + flagsHtml +
+'' +
+'Open listing ↗' +
+'Save' +
+'Bought' +
+'Pass' +
+'' +
+'';
+};
+window.mark = (id, val) => { marks[id] = val; saveMarks(); render(); };
+function render() {
+const app = $('#app');
+const dealsList = D.deals || new Array();
+const rejectedList = D.rejected || new Array();
+const sweepsList = D.sweeps || new Array();
+const active = dealsList.filter(d => marks[d.id] !== 'passed' && marks[d.id] !== 'bought');
+const alerts = active.filter(d => d.decision === 'ALERT');
+const offers = active.filter(d => d.decision === 'OFFER' || d.decision === 'REVIEW');
+const lastSweep = sweepsList.length ? sweepsList.slice(0, 1).pop() : {};
+if (view === 'deals') {
+app.innerHTML = 'Top deals right nowEvery rule passed: ≤ $50 all-in, ≥ $40 conservative profit, verified style, and every photo checked.' +
+'' +
+'Buy alerts' + alerts.length + '' +
+'Offer / Review' + offers.length + '' +
+'Pages read last sweep' + (lastSweep.pages || 0) + '' +
+'Profitable styles' + stylesList.length + '' +
+'' +
+(lastSweep.notes ? '' + esc(lastSweep.notes) + '' : '') +
+(alerts.length ? '' + alerts.map(card).join('') + '' : '') +
+'Listings I checked that didn't pass' +
+'' + rejectedList.slice(0, 12).map(r => 'NOT RECOMMENDED ' + esc(r.marketplace) + '' + esc(r.title) + '✘ ' + esc(r.why) + 'Open listing ↗').join('') + '';
+} else if (view === 'offer') {
+app.innerHTML = 'Make an offer & Review' + (offers.length ? offers.map(card).join('') : 'No offer opportunities right now.') + '';
+} else if (view === 'saved') {
+const saved = dealsList.filter(d => marks[d.id] === 'saved' || marks[d.id] === 'bought');
+app.innerHTML = 'Saved & Bought' + (saved.length ? saved.map(card).join('') : 'Nothing saved yet.') + '';
+} else if (view === 'rejected') {
+app.innerHTML = 'Rejected listings (' + rejectedList.length + ')' + rejectedList.map(r => 'REJECTED ' + esc(r.marketplace) + '' + esc(r.title) + '✘ ' + esc(r.why) + 'Open ↗').join('') + '';
+} else if (view === 'styles') {
+app.innerHTML = 'Tracked styles (' + stylesList.length + ')Brand & StyleClassConservative90d SoldSell-throughMax All-In' + stylesList.map(s => '' + esc(s.brand) + ' — ' + esc(s.name) + '' + s.cls + '' + money(s.conservative) + '' + s.sold90 + '' + pct(s.sell_through) + '' + money(s.max_all_in) + '').join('') + '';
+} else if (view === 'sweeps') {
+app.innerHTML = 'Sweep historyTimeSitesSearchedCheckedAlertsNotes' + sweepsList.map(w => '' + ago(w.at) + '' + (w.sites || new Array()).join(', ') + '' + (w.searched || new Array()).join(', ') + '' + w.candidates + '' + w.alerts + '' + esc(w.notes) + '').join('') + '';
 }
 }
-$('#tabs').addEventListener('click',e=>{if(e.target.dataset.v){view=e.target.dataset.v;document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b===e.target));render()}});
+$('#tabs').addEventListener('click', e => {
+if (e.target.dataset.v) {
+view = e.target.dataset.v;
+document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b === e.target));
 render();
-
-
-
-<FollowUp>
-Reply **"Done"** once **`index.html`** is saved, and I will give you the upgraded **`sweep.py`** (Step 2 of 2) that scans eBay Newly Listed Buy-It-Now so it pulls live listings every hour without getting blocked!
-</FollowUp>
+}
+});
+render();
+} catch (err) {
+document.getElementById('app').innerHTML = 'Error: ' + err.message + '';
+}
