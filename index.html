@@ -7,34 +7,33 @@
 <style>
 :root{color-scheme:light dark;--bg:light-dark(#f6f3ee,#14110f);--card:light-dark(#fff,#1f1b18);--ink:light-dark(#1c1916,#efe9e1);--mute:light-dark(#7a726a,#a59c92);--line:light-dark(#e7e1d8,#332d28);--acc:light-dark(#1f6f5c,#4fb79c);--hot:light-dark(#c2410c,#fb8a52);--warn:light-dark(#b45309,#f0a54a);--bad:light-dark(#b91c1c,#f07171);--ok:light-dark(#15803d,#5cc98a);--rev:light-dark(#a16207,#e5b54a)}
 *{box-sizing:border-box;min-width:0}
-body{margin:0;font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;background:var(--bg);color:var(--ink);overflow-x:clip}
+body{margin:0;font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
 a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}
 header{position:sticky;top:0;z-index:5;background:#14110f;color:#f6f3ee;padding:10px 14px 0;border-bottom:1px solid #2a2420}
 .brand{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}.brand b{font-size:17px}
 .scan{font-size:12px;color:#bfb6ab}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;background:#22c55e}
-nav{display:flex;gap:2px;overflow-x:auto;margin-top:8px;scrollbar-width:none}nav::-webkit-scrollbar{display:none}
+nav{display:flex;gap:2px;overflow-x:auto;margin-top:8px}
 nav button{flex:none;font:inherit;background:none;border:0;color:#d6cec4;padding:10px 12px;border-radius:8px 8px 0 0;white-space:nowrap;font-size:14px;cursor:pointer;min-height:44px}
 nav button.on{background:var(--bg);color:var(--ink);font-weight:600}
 main{max-width:1100px;margin:0 auto;padding:14px}
 h1{font-size:20px;margin:6px 0 4px}h2{font-size:16px;margin:22px 0 8px}
 .lead{color:var(--mute);font-size:13px;margin:0 0 12px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px}
-.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr))}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
 .t{font-weight:600;line-height:1.3}.deal{display:flex;gap:12px}.deal .ph{flex:none;width:96px;height:96px;border-radius:10px;overflow:hidden;background:var(--line);display:block}.deal .ph img{width:100%;height:100%;object-fit:cover;display:block}
 .muted{color:var(--mute);font-size:13px}
-.nums{display:flex;flex-wrap:wrap;gap:6px 14px;margin:6px 0;font-size:13px}.nums b{font-size:15px;white-space:nowrap}
-.pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 7px;border-radius:99px;border:1px solid currentColor;text-transform:uppercase;letter-spacing:.3px}
+.nums{display:flex;flex-wrap:wrap;gap:6px 14px;margin:6px 0;font-size:13px}.nums b{font-size:15px}
+.pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 7px;border-radius:99px;border:1px solid currentColor;text-transform:uppercase}
 .Hot,.ALERT{color:var(--hot)}.Promising{color:var(--ok)}.Selective{color:var(--warn)}.Avoid,.REJECT{color:var(--bad)}.Unverified{color:var(--mute)}.REVIEW,.OFFER{color:var(--rev)}
-.profit{color:var(--hot)}
-.flag{font-size:12px;padding:2px 0;color:var(--warn)}
+.profit{color:var(--hot)}.flag{font-size:12px;padding:2px 0;color:var(--warn)}
 .actions{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}
-.btn{font:inherit;font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;min-height:40px;display:inline-flex;align-items:center}
+.btn{font:inherit;font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;display:inline-flex;align-items:center}
 .btn.primary{background:var(--acc);border-color:var(--acc);color:#fff}
 .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
-table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{font-size:12px;color:var(--mute);font-weight:600}
-td.r,th.r{text-align:right;white-space:nowrap}
-.kpis{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));margin-bottom:12px}
-.kpi .big{font-size:clamp(22px,5vw,28px);font-weight:700;line-height:1.1}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:8px;border-bottom:1px solid var(--line);text-align:left}th{font-size:12px;color:var(--mute)}
+td.r,th.r{text-align:right}
+.kpis{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));margin-bottom:12px}
+.kpi .big{font-size:26px;font-weight:700}
 </style>
 </head>
 <body>
@@ -49,9 +48,9 @@ td.r,th.r{text-align:right;white-space:nowrap}
     <button data-v="sweeps">Sweeps</button>
   </nav>
 </header>
-<main id="app"><div class="card">Loading dashboard...</div></main>
+<main id="app"></main>
 <!--DATA-START--><script id="sweep-data" type="application/json">{
- "updated":"2026-11-22T15:25:00-05:00",
+ "updated":"2026-11-22T15:45:00-05:00",
  "rules":{"max_total":50,"min_profit":40,"tax":0.08,"resale_fee":0.136,"resale_flat":0.4,"resale_ship":9.0,"supplies":1.5},
  "deals":[],
  "rejected":[],
@@ -78,92 +77,88 @@ td.r,th.r{text-align:right;white-space:nowrap}
  "rotation":0
 }</script><!--DATA-END-->
 <script>
-try {
-const rawText = document.getElementById('sweep-data').textContent;
-const D = JSON.parse(rawText);
-const $ = s => document.querySelector(s);
-const esc = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-const money = v => typeof v === 'number' ? '$' + v.toFixed(2) : '—';
-const pct = v => typeof v === 'number' ? Math.round(v * 100) + '%' : '—';
-const ago = iso => { const m = Math.round((Date.now() - new Date(iso)) / 60000); if (isNaN(m)) return ''; if (m < 1) return 'just now'; if (m < 60) return m + ' min ago'; if (m < 2880) return Math.round(m / 60) + ' h ago'; return Math.round(m / 1440) + ' d ago'; };
-const stylesList = D.styles || new Array();
+const D = JSON.parse(document.getElementById("sweep-data").textContent);
+const app = document.getElementById("app");
+const esc = s => String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const money = v => typeof v === "number" ? "$" + v.toFixed(2) : "—";
+const pct = v => typeof v === "number" ? Math.round(v * 100) + "%" : "—";
+const ago = iso => {
+  const m = Math.round((Date.now() - new Date(iso)) / 60000);
+  if (isNaN(m)) return "";
+  if (m < 1) return "just now";
+  if (m < 60) return m + " min ago";
+  if (m < 2880) return Math.round(m / 60) + " h ago";
+  return Math.round(m / 1440) + " d ago";
+};
+const styles = D.styles || new Array();
 const styleBy = {};
-stylesList.forEach(s => { styleBy[s.slug] = s; });
+styles.forEach(s => { styleBy[s.slug] = s; });
 let marks = {};
-try { marks = JSON.parse(localStorage.getItem('df-marks') || '{}'); } catch (e) {}
-const saveMarks = () => { try { localStorage.setItem('df-marks', JSON.stringify(marks)); } catch (e) {} };
-let view = 'deals';
-$('#last').textContent = 'Last sweep ' + ago(D.updated);
+try { marks = JSON.parse(localStorage.getItem("df-marks") || "{}"); } catch (e) {}
+const saveMarks = () => { try { localStorage.setItem("df-marks", JSON.stringify(marks)); } catch (e) {} };
+let view = "deals";
+document.getElementById("last").textContent = "Last sweep " + ago(D.updated);
 
-const card = d => {
+function card(d) {
   const st = styleBy[d.style] || {};
   const m = marks[d.id];
-  const reasonsHtml = (d.reasons || new Array()).map(r => '<div class="muted">✓ ' + esc(r) + '</div>').join('');
-  const flagsHtml = (d.flags || new Array()).map(f => '<div class="flag">⚠ ' + esc(f) + '</div>').join('');
-  return '<div class="card deal">' +
-    (d.img ? '<a class="ph" href="' + esc(d.url) + '" target="_blank" rel="noopener"><img src="' + d.img + '" alt="Listing photo" loading="lazy"></a>' : '') +
-    '<div style="flex:1">' +
-      '<div><span class="pill ' + d.decision + '">' + d.decision + '</span> <span class="muted">' + esc(d.marketplace) + ' · found ' + ago(d.found) + '</span>' + (m ? ' <span class="muted">· ' + m + '</span>' : '') + '</div>' +
-    '' + esc(d.title) + '' +
-(st.brand ? '' + esc(st.brand) + ' — ' + esc(st.name) + '' : '') +
-'' +
-'All-in ' + money(d.total) + '' +
-'Est. resale ' + money(d.resale) + '' +
-'Net profit +' + money(d.net_profit) + '' +
-(d.offer_at ? 'Offer ' + money(d.offer_at) + '' : '') +
-'' +
+  const imgHtml = d.img ? '<a class="ph" href="' + esc(d.url) + '" target="_blank"><img src="' + d.img + '" alt=""></a>' : "";
+  const reasonsHtml = (d.reasons || new Array()).map(r => '<div class="muted">✓ ' + esc(r) + '</div>').join("");
+  const flagsHtml = (d.flags || new Array()).map(f => '<div class="flag">⚠ ' + esc(f) + '</div>').join("");
+  return '<div class="card deal">' + imgHtml + '<div style="flex:1">' +
+    '<div><span class="pill ' + d.decision + '">' + d.decision + '</span> <span class="muted">' + esc(d.marketplace) + ' · found ' + ago(d.found) + '</span>' + (m ? ' <span class="muted">· ' + m + '</span>' : '') + '</div>' +
+    '<div class="t"><a href="' + esc(d.url) + '" target="_blank">' + esc(d.title) + '</a></div>' +
+    (st.brand ? '<div class="muted">' + esc(st.brand) + ' — ' + esc(st.name) + '</div>' : '') +
+    'All-in ' + money(d.total) + 'Est. resale ' + money(d.resale) + 'Net profit +' + money(d.net_profit) + '' +
 reasonsHtml + flagsHtml +
-'' +
-'Open listing ↗' +
+'Open listing' +
 'Save' +
 'Bought' +
-'Pass' +
-'' +
-'';
-};
-window.mark = (id, val) => { marks[id] = val; saveMarks(); render(); };
+'Pass';
+}
 function render() {
-const app = $('#app');
-const dealsList = D.deals || new Array();
-const rejectedList = D.rejected || new Array();
-const sweepsList = D.sweeps || new Array();
-const active = dealsList.filter(d => marks[d.id] !== 'passed' && marks[d.id] !== 'bought');
-const alerts = active.filter(d => d.decision === 'ALERT');
-const offers = active.filter(d => d.decision === 'OFFER' || d.decision === 'REVIEW');
-const lastSweep = sweepsList.length ? sweepsList.slice(0, 1).pop() : {};
-if (view === 'deals') {
+const deals = D.deals || new Array();
+const rejected = D.rejected || new Array();
+const sweeps = D.sweeps || new Array();
+const active = deals.filter(d => marks[d.id] !== "passed" && marks[d.id] !== "bought");
+const alerts = active.filter(d => d.decision === "ALERT");
+const offers = active.filter(d => d.decision === "OFFER" || d.decision === "REVIEW");
+const lastSweep = sweeps.length ? sweeps.slice(0, 1).pop() : {};
+if (view === "deals") {
 app.innerHTML = 'Top deals right nowEvery rule passed: ≤ $50 all-in, ≥ $40 conservative profit, verified style, and every photo checked.' +
-'' +
 'Buy alerts' + alerts.length + '' +
 'Offer / Review' + offers.length + '' +
 'Pages read last sweep' + (lastSweep.pages || 0) + '' +
-'Profitable styles' + stylesList.length + '' +
-'' +
+'Profitable styles' + styles.length + '' +
 (lastSweep.notes ? '' + esc(lastSweep.notes) + '' : '') +
-(alerts.length ? '' + alerts.map(card).join('') + '' : '') +
-'Listings I checked that didn't pass' +
-'' + rejectedList.slice(0, 12).map(r => 'NOT RECOMMENDED ' + esc(r.marketplace) + '' + esc(r.title) + '✘ ' + esc(r.why) + 'Open listing ↗').join('') + '';
-} else if (view === 'offer') {
-app.innerHTML = 'Make an offer & Review' + (offers.length ? offers.map(card).join('') : 'No offer opportunities right now.') + '';
-} else if (view === 'saved') {
-const saved = dealsList.filter(d => marks[d.id] === 'saved' || marks[d.id] === 'bought');
-app.innerHTML = 'Saved & Bought' + (saved.length ? saved.map(card).join('') : 'Nothing saved yet.') + '';
-} else if (view === 'rejected') {
-app.innerHTML = 'Rejected listings (' + rejectedList.length + ')' + rejectedList.map(r => 'REJECTED ' + esc(r.marketplace) + '' + esc(r.title) + '✘ ' + esc(r.why) + 'Open ↗').join('') + '';
-} else if (view === 'styles') {
-app.innerHTML = 'Tracked styles (' + stylesList.length + ')Brand & StyleClassConservative90d SoldSell-throughMax All-In' + stylesList.map(s => '' + esc(s.brand) + ' — ' + esc(s.name) + '' + s.cls + '' + money(s.conservative) + '' + s.sold90 + '' + pct(s.sell_through) + '' + money(s.max_all_in) + '').join('') + '';
-} else if (view === 'sweeps') {
-app.innerHTML = 'Sweep historyTimeSitesSearchedCheckedAlertsNotes' + sweepsList.map(w => '' + ago(w.at) + '' + (w.sites || new Array()).join(', ') + '' + (w.searched || new Array()).join(', ') + '' + w.candidates + '' + w.alerts + '' + esc(w.notes) + '').join('') + '';
+(alerts.length ? '' + alerts.map(card).join("") + '' : '') +
+'Listings checked that did not pass' +
+rejected.slice(0, 12).map(r => 'NOT RECOMMENDED ' + esc(r.marketplace) + '' + esc(r.title) + '' + esc(r.why) + 'Open listing').join("") + '';
+} else if (view === "offer") {
+app.innerHTML = 'Make an offer & Review' + (offers.length ? offers.map(card).join("") : 'No offer opportunities right now.') + '';
+} else if (view === "saved") {
+const saved = deals.filter(d => marks[d.id] === "saved" || marks[d.id] === "bought");
+app.innerHTML = 'Saved & Bought' + (saved.length ? saved.map(card).join("") : 'Nothing saved yet.') + '';
+} else if (view === "rejected") {
+app.innerHTML = 'Rejected listings (' + rejected.length + ')' + rejected.map(r => 'REJECTED ' + esc(r.marketplace) + '' + esc(r.title) + '' + esc(r.why) + 'Open').join("") + '';
+} else if (view === "styles") {
+app.innerHTML = 'Tracked styles (' + styles.length + ')Brand & StyleClassConservative90d SoldSell-throughMax All-In' + styles.map(s => '' + esc(s.brand) + ' — ' + esc(s.name) + '' + s.cls + '' + money(s.conservative) + '' + s.sold90 + '' + pct(s.sell_through) + '' + money(s.max_all_in) + '').join("") + '';
+} else if (view === "sweeps") {
+app.innerHTML = 'Sweep historyTimeSitesSearchedCheckedAlertsNotes' + sweeps.map(w => '' + ago(w.at) + '' + (w.sites || new Array()).join(", ") + '' + (w.searched || new Array()).join(", ") + '' + w.candidates + '' + w.alerts + '' + esc(w.notes) + '').join("") + '';
 }
 }
-$('#tabs').addEventListener('click', e => {
+document.getElementById("tabs").addEventListener("click", e => {
 if (e.target.dataset.v) {
 view = e.target.dataset.v;
-document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b === e.target));
+document.querySelectorAll("#tabs button").forEach(b => b.classList.toggle("on", b === e.target));
+render();
+}
+});
+app.addEventListener("click", e => {
+if (e.target.dataset.id && e.target.dataset.m) {
+marks[e.target.dataset.id] = e.target.dataset.m;
+saveMarks();
 render();
 }
 });
 render();
-} catch (err) {
-document.getElementById('app').innerHTML = 'Error: ' + err.message + '';
-}
