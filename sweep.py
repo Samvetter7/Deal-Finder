@@ -225,13 +225,13 @@ def main():
 if total <= 50 and profit >= 40 and st["sell_through"] >= 0.25:
                 record["decision"] = "ALERT"
                 new_alerts.append(record)
-            elif total > 50 and offer_at >= 0.70 * item["price"] and profit_at_offer >= 40:
+elif total > 50 and offer_at >= 0.70 * item["price"] and profit_at_offer >= 40:
                 record["decision"] = "OFFER"
                 new_offers.append(record)
-            elif total <= 50 and profit >= 30:
+elif total <= 50 and profit >= 30:
                 record["decision"] = "REVIEW"
                 new_offers.append(record)
-            else:
+else:
                 new_rejected.append({"marketplace": item["marketplace"], "title": f"{item['title']} - ${item['price']:.0f}", "why": f"Profit too low (${profit:.2f} net at ${total:.2f} all-in).", "url": item["url"]})
 
     data["deals"] = (new_alerts + new_offers + data.get("deals", []))[:40]
