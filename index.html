@@ -51,7 +51,7 @@ td.r,th.r{text-align:right;white-space:nowrap}
 </header>
 <main id="app"></main>
 <!--DATA-START--><script id="sweep-data" type="application/json">{
- "updated":"2026-11-22T13:00:00-05:00",
+ "updated":"2026-11-22T15:05:00-05:00",
  "rules":{"max_total":50,"min_profit":40,"tax":0.08,"resale_fee":0.136,"resale_flat":0.4,"resale_ship":9.0,"supplies":1.5},
  "deals":[],
  "rejected":[],
@@ -101,6 +101,42 @@ return `<div class="card deal">${d.img?`<a class="ph" href="${esc(d.url)}" targe
   <span class="profit">Net profit <b>+${money(d.net_profit)}</b></span>
   ${d.offer_at?`<span>Offer <b>${money(d.offer_at)}</b></span>`:''}
  </div>
- ${(d.reasons||[]).map(r=>`<div class="muted">✓ ${esc(r)}</div>`).join('')}
- ${(d.flags||[]).map(f=>`<div class="flag">⚠ ${esc(f)}</div>`).join('')}
+ ${(d.reasons||new Array()).map(r=>`<div class="muted">✓ ${esc(r)}</div>`).join('')}
+ ${(d.flags||new Array()).map(f=>`<div class="flag">⚠ ${esc(f)}</div>`).join('')}
  <div class="actions">
+Open listing ↗
+Save
+Bought
+Pass
+
+`};
+window.mark=(id,val)=>{marks[id]=val;saveMarks();render()};
+function render(){
+const app=$('#app');
+const active=D.deals.filter(d=>marks[d.id]!=='passed'&&marks[d.id]!=='bought');
+const alerts=active.filter(d=>d.decision==='ALERT');
+const offers=active.filter(d=>d.decision==='OFFER'||d.decision==='REVIEW');
+const lastSweep=D.sweeps.at(0)||{};
+if(view==='deals'){
+app.innerHTML=<h1>Top deals right now</h1><p class="lead">Every rule passed: ≤ $50 all-in, ≥ $40 conservative profit, verified style, and every photo checked.</p> <div class="kpis"> <div class="card kpi"><div class="muted">Buy alerts</div><div class="big profit">${alerts.length}</div></div> <div class="card kpi"><div class="muted">Offer / Review</div><div class="big">${offers.length}</div></div> <div class="card kpi"><div class="muted">Pages read last sweep</div><div class="big">${lastSweep.pages||0}</div></div> <div class="card kpi"><div class="muted">Profitable styles</div><div class="big">${D.styles.length}</div></div> </div> ${lastSweep.notes?${esc(lastSweep.notes)}:''} ${alerts.length?${alerts.map(card).join('')}:''} <h2>Listings I checked that didn't pass</h2> <div class="grid">${D.rejected.slice(0,12).map(r=>NOT RECOMMENDED ${esc(r.marketplace)}${esc(r.title)}✘ ${esc(r.why)}Open listing ↗).join('')}</div>;
+} else if(view==='offer'){
+app.innerHTML=<h1>Make an offer & Review</h1><div class="grid">${offers.length?offers.map(card).join(''):'<p class="muted">No offer opportunities right now.</p>'}</div>;
+} else if(view==='saved'){
+const saved=D.deals.filter(d=>marks[d.id]==='saved'||marks[d.id]==='bought');
+app.innerHTML=<h1>Saved & Bought</h1><div class="grid">${saved.length?saved.map(card).join(''):'<p class="muted">Nothing saved yet.</p>'}</div>;
+} else if(view==='rejected'){
+app.innerHTML=<h1>Rejected listings (${D.rejected.length})</h1><div class="grid">${D.rejected.map(r=>REJECTED ${esc(r.marketplace)}${esc(r.title)}✘ ${esc(r.why)}Open ↗).join('')}</div>;
+} else if(view==='styles'){
+app.innerHTML=<h1>Tracked styles (${D.styles.length})</h1><div class="tablewrap"><table><thead><tr><th>Brand & Style</th><th>Class</th><th class="r">Conservative</th><th class="r">90d Sold</th><th class="r">Sell-through</th><th class="r">Max All-In</th></tr></thead><tbody>${D.styles.map(s=>${esc(s.brand)} — ${esc(s.name)}${s.cls}${money(s.conservative)}${s.sold90}${pct(s.sell_through)}${money(s.max_all_in)}).join('')}</tbody></table></div>;
+} else if(view==='sweeps'){
+app.innerHTML=<h1>Sweep history</h1><div class="tablewrap"><table><thead><tr><th>Time</th><th>Sites</th><th>Searched</th><th class="r">Checked</th><th class="r">Alerts</th><th>Notes</th></tr></thead><tbody>${D.sweeps.map(w=>${ago(w.at)}${(w.sites||new Array()).join(', ')}${(w.searched||new Array()).join(', ')}${w.candidates}${w.alerts}${esc(w.notes)}).join('')}</tbody></table></div>;
+}
+}
+$('#tabs').addEventListener('click',e=>{if(e.target.dataset.v){view=e.target.dataset.v;document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b===e.target));render()}});
+render();
+
+
+
+<FollowUp>
+Reply **"Done"** once **`index.html`** is saved, and I will give you the upgraded **`sweep.py`** (Step 2 of 2) that scans eBay Newly Listed Buy-It-Now so it pulls live listings every hour without getting blocked!
+</FollowUp>
