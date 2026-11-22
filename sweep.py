@@ -223,30 +223,34 @@ def main():
 "flags": [], "reasons": [reason], "found": now_iso
 }
 if total <= 50 and profit >= 40 and st["sell_through"] >= 0.25:
-record["decision"] = "ALERT"
-new_alerts.append(record)
-elif total > 50 and offer_at >= 0.70 * item["price"] and profit_at_offer >= 40:
-record["decision"] = "OFFER"
-new_offers.append(record)
-elif total <= 50 and profit >= 30:
-record["decision"] = "REVIEW"
-new_offers.append(record)
-else:
-new_rejected.append({"marketplace": item["marketplace"], "title": f"{item['title']} - ${item['price']:.0f}", "why": f"Profit too low (${profit:.2f} net at ${total:.2f} all-in).", "url": item["url"]})
-data["deals"] = (new_alerts + new_offers + data.get("deals", []))[:40]
-seen_rej = {r["url"] for r in new_rejected}
-data["rejected"] = (new_rejected + [r for r in data.get("rejected", []) if r["url"] not in seen_rej])[:40]
-data["seen"] = list(seen)[-3000:]
-data["updated"] = datetime.now(EST).isoformat(timespec="seconds")
-note = f"Checked {candidates_checked} listings across {len(batch)} priority styles." + (" " + "; ".join(set(notes_list)) if notes_list else "")
-data["sweeps"] = ([{
-"at": data["updated"], "sites": ["Poshmark"],
-"searched": [s["brand"] for s in batch], "pages": pages_read,
-"candidates": candidates_checked, "alerts": len(new_alerts),
-"offers": len(new_offers), "notes": note
-}] + data.get("sweeps", []))[:100]
-save_html(html, data)
-if new_alerts:
-send_email(new_alerts)
-if name == "main":
+                record["decision"] = "ALERT"
+                new_alerts.append(record)
+            elif total > 50 and offer_at >= 0.70 * item["price"] and profit_at_offer >= 40:
+                record["decision"] = "OFFER"
+                new_offers.append(record)
+            elif total <= 50 and profit >= 30:
+                record["decision"] = "REVIEW"
+                new_offers.append(record)
+            else:
+                new_rejected.append({"marketplace": item["marketplace"], "title": f"{item['title']} - ${item['price']:.0f}", "why": f"Profit too low (${profit:.2f} net at ${total:.2f} all-in).", "url": item["url"]})
+
+    data["deals"] = (new_alerts + new_offers + data.get("deals", []))[:40]
+    seen_rej = {r["url"] for r in new_rejected}
+    data["rejected"] = (new_rejected + [r for r in data.get("rejected", []) if r["url"] not in seen_rej])[:40]
+    data["seen"] = list(seen)[-3000:]
+    data["updated"] = datetime.now(EST).isoformat(timespec="seconds")
+    note = f"Checked {candidates_checked} listings across {len(batch)} priority styles." + (" " + "; ".join(set(notes_list)) if notes_list else "")
+    data["sweeps"] = ([{
+        "at": data["updated"], "sites": ["Poshmark"],
+        "searched": [s["brand"] for s in batch], "pages": pages_read,
+        "candidates": candidates_checked, "alerts": len(new_alerts),
+        "offers": len(new_offers), "notes": note
+    }] + data.get("sweeps", []))[:100]
+
+    save_html(html, data)
+    if new_alerts:
+        send_email(new_alerts)
+
+if __name__ == "__main__":
+    main()
 main()
